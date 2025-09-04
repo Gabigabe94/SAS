@@ -2,6 +2,7 @@
 
 int main(){
 
+    // comments
     int n,tabElements[n];
 
     printf("Donner le nombre d'éléments d'un tableau :\n");
