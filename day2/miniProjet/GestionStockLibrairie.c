@@ -2,101 +2,172 @@
 #include <string.h>
 
 #define MAXBOOKS 100
-#define MAXTITLELENGHT 50
-#define MAXAUTHORLENGHT 50
+#define SIZETITLE 100
+#define SIZEAUTHOR 30
 
-int rechercher(char tab[MAXBOOKS][MAXTITLELENGHT], int c)
+char titleBook[MAXBOOKS][SIZETITLE];
+char authorBook[MAXBOOKS][SIZEAUTHOR];
+float priceBook[MAXBOOKS];
+int quantityInStock[MAXBOOKS];
+int numberBooks = 0;
+
+int rechercher()
 {
 
     char search[MAXBOOKS];
     printf("Titre du livre : \n");
     getchar();
     fgets(search, sizeof(search), stdin);
-    for (int i = 0; i < c; i++)
+    for (int i = 0; i < numberBooks; i++)
     {
-        if (strcmp(search, tab[i]) == 0)
+        if (strcmp(search, titleBook[i]) == 0)
         {
             return i;
         }
     }
     return -1;
+
+}
+
+void afficher()
+{
+
+    for (int i = 0; i < numberBooks; i++)
+    {
+        printf("Livre numéro %d\n",i+1);
+        printf("Titre de livre : %s,\n", titleBook[i]);
+        printf("Nom de l'auteur : %s,\n", authorBook[i]);
+        printf("Le prix : %0.2f DH,\n", priceBook[i]);
+        printf("Le nombre total de livres en stoc : %d.\n", quantityInStock[i]);
+    }
 }
 
 int main()
 {
 
-    char titleBook[MAXBOOKS][MAXTITLELENGHT];
-    char authorBook[MAXBOOKS][MAXAUTHORLENGHT];
-    float priceBook[MAXBOOKS];
-    int quantityInStock[MAXBOOKS];
-    int numberBook = 0;
     int choice = 0;
 
     do
     {
         printf("====== Système de Gestion de Stock dans une Librairie ======\n");
         printf("--------------------------  MENU  --------------------------\n");
-        printf("1-Ajouter un livre au stock.\n");
-        printf("2-Afficher tous les livres disponibles.\n");
-        printf("3-Rechercher un livre par son titre.\n");
-        printf("4.Mettre à jour la quantité d'un livre.\n");
-        printf("5.Supprimer un livre du stock.\n");
-        printf("6-Afficher le nombre total de livres en stock.\n");
-        printf("7-Exit !!!\n");
+        printf("1- Ajouter un livre au stock.\n");
+        printf("2- Afficher tous les livres disponibles.\n");
+        printf("3- Rechercher un livre par son titre.\n");
+        printf("4- Mettre à jour la quantité d'un livre.\n");
+        printf("5- Supprimer un livre du stock.\n");
+        printf("6- Afficher le nombre total de livres en stock.\n");
+        printf("7- Quitter !!!\n");
         printf("-------------------- Saisir votre choix ---------------------\n");
         scanf("%d", &choice);
-        getchar();
-
+        // getchar();
+        int position;
         switch (choice)
         {
         case 1:
-
+            if (numberBooks >= MAXBOOKS)
+            {
+                printf(" Le stock est plein, impossible d'ajouter plus de livres.\n");
+            }
             printf("Entrer le titre de livre :\n");
-            getchar();
-            fgets(titleBook[numberBook], sizeof(titleBook), stdin);
-            printf("Entrer le nom de l'auteur du livre :\n");
-            getchar();
-            fgets(authorBook[numberBook], sizeof(numberBook), stdin);
-            printf("Entrer le prix de livre :\n");
-            scanf("%f", &priceBook[numberBook]);
-            printf("Entrer la quantitée :\n");
-            scanf("%d", &quantityInStock[numberBook]);
-            numberBook++;
-            // printf("%d",numberBook);
+            getchar(); // vider buffer
+            fgets(titleBook[numberBooks], SIZETITLE, stdin);
+            titleBook[numberBooks][strcspn(titleBook[numberBooks], "\n")] = 0;
+
+            printf("Entrer l'auteur du livre :\n");
+            fgets(authorBook[numberBooks], SIZEAUTHOR, stdin);
+            authorBook[numberBooks][strcspn(authorBook[numberBooks], "\n")] = 0;
+
+            printf("Entrer le prix du livre :\n");
+            scanf("%f", &priceBook[numberBooks]);
+
+            printf("Entrer la quantitée en stock :\n");
+            scanf("%d", &quantityInStock[numberBooks]);
+
+            numberBooks++;
+            printf(" Livre ajouté avec succès !\n");
             break;
 
         case 2:
 
-            printf("-------Liste de livres---------\n");
-            for (int i = 0; i < numberBook; i++)
+            if (numberBooks == 0)
             {
-                printf("Titre de livre : %s, nom de l'auteur : %s, le prix : %0.2f, le nombre total de livres en stoc : %d. \n", titleBook[i], authorBook[i], priceBook[i], quantityInStock[i]);
+                printf("Y a pas des livres dans la librairie !!\n");
             }
-            printf("-------Liste de livres---------\n");
+            else
+            {
+                printf("------- Liste de livres disponibles---------\n");
+                afficher();
+                printf("------- Liste de livres disponibles---------\n");
+            }
             break;
 
         case 3:
-            int position = rechercher(titleBook, numberBook);
+            
+            position = rechercher();
+            if (position == -1)
+            {
+                printf("Le livre n'existe pas !!\n");
+            }
+            else
+            {
+                printf("====== Détails de livre =========");
+                printf("Titre de livre : %s,\n", titleBook[position]);
+                printf("Nom de l'auteur : %s,\n", authorBook[position]);
+                printf("Le prix : %0.2f,\n", priceBook[position]);
+                printf("Le nombre total de livres en stoc : %d.\n", quantityInStock[position]);
+            }
+            break;
+
+        case 4:
+
+            position = rechercher();
             if (position == -1)
             {
                 printf("Le livre n'existe pas \n");
             }
             else
             {
-                printf("Titre de livre : %s, nom de l'auteur : %s, le prix : %0.2f, le quantite : %d. \n", titleBook[position], authorBook[position], priceBook[position], quantityInStock[position]);
+                int newQuantity;
+                printf("Saisir la nouvelle quantitée :\n");
+                scanf("%d\n", &newQuantity);
+                quantityInStock[position] = newQuantity;
+                printf("====== Modification effectuée avec succés ======");
             }
             break;
-        case 4:
-            printf("maj\n");
-            break;
+
         case 5:
-            printf("supprimer\n");
+
+            position = rechercher();
+            if (position == -1)
+            {
+                printf("Le livre n'existe pas \n");
+            }
+            else
+            {
+                for (int i = position; i < numberBooks; i++)
+                {
+                    strcpy(titleBook[i], titleBook[i + 1]);
+                    strcpy(authorBook[i], authorBook[i + 1]);
+                    priceBook[i] = priceBook[i + 1];
+                    quantityInStock[i] = quantityInStock[i + 1];
+                }
+                numberBooks--;
+                printf("====== Supression effectuée avec succés ======");
+            }
             break;
+
         case 6:
-            printf("aficher total\n");
+
+            printf("Le nombre total de livres dans la librairie est %d,\n", numberBooks);
+            for (int i = 0; i < numberBooks; i++)
+            {
+                printf("La quantitée en stock de le livre %s est %d.\n", titleBook[i], quantityInStock[i]);
+            }
             break;
+
         case 7:
-            printf("a bientot\n");
+            printf("==============A bientôt==============\n");
             break;
 
         default:
