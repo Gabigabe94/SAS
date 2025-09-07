@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 int main (){
+
     int nbr;
     printf("Donner un nombre \n");
     scanf("%d",&nbr);
@@ -10,4 +11,5 @@ int main (){
         printf("Nombre impaire !!");
     }
     return 0;
+    
 }
