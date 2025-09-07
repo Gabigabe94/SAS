@@ -7,7 +7,7 @@ int main(){
     printf("Donner la taille du tableau :\n");
     scanf("%d",&n);
 
-    printf("Remplissage de tableau :\n");
+    printf("Remplissage du tableau :\n");
     int tablCroissant[n];
     for (int i = 0; i < n; i++)
     {
