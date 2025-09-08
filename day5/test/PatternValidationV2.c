@@ -14,6 +14,16 @@ void patternValidation( int arr[], int sizeArr){
 }
 
 int main (){
-    int arr[] = {1,2,3,4,5};
-    patternValidation(arr,5);
+
+    int n;
+    printf("\nDonner le nombre d'élément :\n");
+    scanf("%d",&n);
+
+    int tab[n];
+    printf("Remplissage\n");
+    for (int i = 0; i < n; i++)
+    {
+        scanf("%d",&tab[i]);
+    }
+    patternValidation(tab,n);
 }
